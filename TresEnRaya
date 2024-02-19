@@ -2,34 +2,34 @@ import java.util.Scanner;
 
 public class App {
 
-    // Variables de instancia para controlar el estado del juego
-    char jugadorActual = 'X'; // Jugador actual, comienza con 'X'
-    char[][] tablero = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}}; // Tablero de juego
-    Scanner scanner = new Scanner(System.in); // Objeto Scanner para entrada de usuario
+    // Variables
+    char jugadorActual = 'X'; 
+    char[][] tablero = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
+    Scanner scanner = new Scanner(System.in);
 
     // Método principal que inicia el juego
     public static void main(String[] args) {
         App juego = new App();
-        juego.iniciarJuego(); // Llamar al método iniciarJuego()
+        juego.iniciarJuego(); 
     }
 
     // Método que controla el flujo del juego
     public void iniciarJuego() {
-        boolean juegoTerminado = false; // Booleano para indicar si el juego ha terminado
+        boolean juegoTerminado = false;
         while (!juegoTerminado) { // Bucle principal del juego
-            mostrarTablero(); // Mostrar el tablero actual
-            juegoTerminado = realizarJugada(); // Realizar la jugada del jugador actual
+            mostrarTablero();
+            juegoTerminado = realizarJugada();
 
             // Comprobar si hay un ganador
             if (hayGanador()) {
-                mostrarTablero(); // Mostrar el tablero final
-                System.out.println("¡Jugador " + jugadorActual + " ha ganado!"); // Imprimir mensaje de victoria
-                juegoTerminado = true; // Establecer el juego como terminado
+                mostrarTablero();
+                System.out.println("¡Jugador " + jugadorActual + " ha ganado!");
+                juegoTerminado = true;
             } // Comprobar si hay un empate
             else if (tableroCompleto()) {
-                mostrarTablero(); // Mostrar el tablero final
-                System.out.println("¡Empate!"); // Imprimir mensaje de empate
-                juegoTerminado = true; // Establecer el juego como terminado
+                mostrarTablero();
+                System.out.println("¡Empate!");
+                juegoTerminado = true;
             }
 
             cambiarJugador(); // Cambiar al siguiente jugador
@@ -41,9 +41,9 @@ public class App {
         System.out.println("Tablero actual:");
         for (int i = 0; i < tablero.length; i++) {
             for (int j = 0; j < tablero.length; j++) {
-                System.out.print(tablero[i][j]); // Imprimir el contenido de cada casilla
+                System.out.print(tablero[i][j]); 
                 if (j < 2) {
-                    System.out.print(" | "); // Separador entre columnas
+                    System.out.print(" | ");
                 }
             }
             System.out.println();
@@ -56,8 +56,8 @@ public class App {
 
     // Método para que el jugador actual realice una jugada
     public boolean realizarJugada() {
-        int fila, columna; // Variables para almacenar la fila y columna elegidas
-        boolean jugadaValida = false; // Booleano para indicar si la jugada es válida
+        int fila, columna;
+        boolean jugadaValida = false;
 
         // Bucle para solicitar una jugada válida al jugador actual
         do {
@@ -70,13 +70,13 @@ public class App {
 
             // Comprobar si la casilla elegida por el jugador es válida
             if (casillaValida(fila, columna)) {
-                tablero[fila][columna] = jugadorActual; // Actualizar el tablero con la jugada del jugador
-                jugadaValida = true; // La jugada es válida, salir del bucle
+                tablero[fila][columna] = jugadorActual; 
+                jugadaValida = true; 
             } else {
                 System.out.println("Casilla ocupada o entrada inválida. Inténtalo de nuevo."); // Mostrar mensaje de error
             }
 
-        } while (!jugadaValida); // Repetir hasta que se realice una jugada válida
+        } while (!jugadaValida);
 
         // Devolver verdadero si el tablero está completo o hay un ganador, falso de lo contrario
         return tableroCompleto() || hayGanador();
@@ -104,11 +104,11 @@ public class App {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (tablero[i][j] == ' ') {
-                    return false; // Devolver falso si hay al menos una casilla vacía
+                    return false;
                 }
             }
         }
-        return true; // Devolver verdadero si todas las casillas están ocupadas
+        return true;
     }
 
     // Método para cambiar al siguiente jugador
@@ -118,7 +118,7 @@ public class App {
 
     // Método para comprobar si la casilla elegida por el jugador es válida
     public boolean casillaValida(int fila, int columna) {
-        // Comprobar si la fila y la columna están dentro del rango del tablero y la casilla está vacía
+        // Comprobar si la fila y la columna están dentro del rango del tablero y si la casilla está vacía
         return (fila >= 0 && fila < 3 && columna >= 0 && columna < 3 && tablero[fila][columna] == ' ');
     }
 }
