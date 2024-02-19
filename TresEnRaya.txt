@@ -2,106 +2,123 @@ import java.util.Scanner;
 
 public class App {
 
+    // Variables de instancia para controlar el estado del juego
+    char jugadorActual = 'X'; // Jugador actual, comienza con 'X'
+    char[][] tablero = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}}; // Tablero de juego
+    Scanner scanner = new Scanner(System.in); // Objeto Scanner para entrada de usuario
+
+    // Método principal que inicia el juego
     public static void main(String[] args) {
-        JuegoTresEnRaya juego = new JuegoTresEnRaya();
-        juego.jugarTresEnRaya();
+        App juego = new App();
+        juego.iniciarJuego(); // Llamar al método iniciarJuego()
     }
-}
 
-class JuegoTresEnRaya {
+    // Método que controla el flujo del juego
+    public void iniciarJuego() {
+        boolean juegoTerminado = false; // Bandera para indicar si el juego ha terminado
+        while (!juegoTerminado) { // Bucle principal del juego
+            mostrarTablero(); // Mostrar el tablero actual
+            juegoTerminado = realizarJugada(); // Realizar la jugada del jugador actual
 
-    public static final char JUGADOR_X = 'X';
-    public static final char JUGADOR_O = 'O';
-
-    private char jugadorActual = JUGADOR_X;
-    private final char[][] tablero = {{' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '}};
-    private final Scanner scanner = new Scanner(System.in);
-
-    public void jugarTresEnRaya() {
-        do {
-            mostrarTablero();
-            realizarJugada();
-
+            // Comprobar si hay un ganador
             if (hayGanador()) {
-                mostrarTablero();
-                System.out.println("¡Jugador " + jugadorActual + " ha ganado!");
-                break;
-            } else if (tableroCompleto()) {
-                mostrarTablero();
-                System.out.println("¡Empate!");
-                break;
+                mostrarTablero(); // Mostrar el tablero final
+                System.out.println("¡Jugador " + jugadorActual + " ha ganado!"); // Imprimir mensaje de victoria
+                juegoTerminado = true; // Establecer el juego como terminado
+            } // Comprobar si hay un empate
+            else if (tableroCompleto()) {
+                mostrarTablero(); // Mostrar el tablero final
+                System.out.println("¡Empate!"); // Imprimir mensaje de empate
+                juegoTerminado = true; // Establecer el juego como terminado
             }
 
-            cambiarJugador();
-
-        } while (true);
+            cambiarJugador(); // Cambiar al siguiente jugador
+        }
     }
 
+    // Método para mostrar el tablero actual
     public void mostrarTablero() {
         System.out.println("Tablero actual:");
         for (int i = 0; i < tablero.length; i++) {
             for (int j = 0; j < tablero.length; j++) {
-                System.out.print(tablero[i][j]);
+                System.out.print(tablero[i][j]); // Imprimir el contenido de cada casilla
                 if (j < 2) {
-                    System.out.print(" | ");
+                    System.out.print(" | "); // Separador entre columnas
                 }
             }
             System.out.println();
             if (i < 2) {
-                System.out.println("---------");
+                System.out.println("---------"); // Línea divisoria entre filas
             }
         }
         System.out.println();
     }
 
-    public void realizarJugada() {
-        int fila, columna;
+    // Método para que el jugador actual realice una jugada
+    public boolean realizarJugada() {
+        int fila, columna; // Variables para almacenar la fila y columna elegidas
+        boolean jugadaValida = false; // Bandera para indicar si la jugada es válida
 
+        // Bucle para solicitar una jugada válida al jugador actual
         do {
+            // Solicitar al jugador la fila y la columna de su jugada
+            System.out.println("La primera fila y columna es la 0 y la última fila y columna es la 2");
             System.out.print("Jugador " + jugadorActual + ", ingresa la fila (0-2): ");
-            fila = scanner.nextInt();
-            System.out.print("Jugador " + jugadorActual + ", ingresa la columna (0-2): ");
-            columna = scanner.nextInt();
+            fila = scanner.nextInt(); // Leer la fila ingresada por el jugador
+            System.out.println("Jugador " + jugadorActual + ", ingresa la columna (0-2): ");
+            columna = scanner.nextInt(); // Leer la columna ingresada por el jugador
 
+            // Comprobar si la casilla elegida por el jugador es válida
             if (casillaValida(fila, columna)) {
-                tablero[fila][columna] = jugadorActual;
-                break;
+                tablero[fila][columna] = jugadorActual; // Actualizar el tablero con la jugada del jugador
+                jugadaValida = true; // La jugada es válida, salir del bucle
             } else {
-                System.out.println("Casilla ocupada o entrada inválida. Inténtalo de nuevo.");
+                System.out.println("Casilla ocupada o entrada inválida. Inténtalo de nuevo."); // Mostrar mensaje de error
             }
 
-        } while (true);
+        } while (!jugadaValida); // Repetir hasta que se realice una jugada válida
+
+        // Devolver verdadero si el tablero está completo o hay un ganador, falso de lo contrario
+        return tableroCompleto() || hayGanador();
     }
 
+    // Método para comprobar si hay un ganador
     public boolean hayGanador() {
+        // Comprobar filas y columnas para ver si hay tres símbolos iguales en línea
         for (int i = 0; i < tablero.length; i++) {
             if ((tablero[i][0] == jugadorActual && tablero[i][1] == jugadorActual && tablero[i][2] == jugadorActual)
                     || (tablero[0][i] == jugadorActual && tablero[1][i] == jugadorActual && tablero[2][i] == jugadorActual)) {
-                return true;
+                return true; // Devolver verdadero si hay un ganador en una fila o columna
             }
         }
 
+        // Comprobar diagonales para ver si hay tres símbolos iguales en línea
         return (tablero[0][0] == jugadorActual && tablero[1][1] == jugadorActual && tablero[2][2] == jugadorActual)
                 || (tablero[0][2] == jugadorActual && tablero[1][1] == jugadorActual && tablero[2][0] == jugadorActual);
+        // Devolver verdadero si hay un ganador en alguna de las diagonales
     }
 
+// Método para comprobar si el tablero está completo
     public boolean tableroCompleto() {
+        // Iterar sobre todas las casillas del tablero
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (tablero[i][j] == ' ') {
-                    return false;
+                    return false; // Devolver falso si hay al menos una casilla vacía
                 }
             }
         }
-        return true;
+        return true; // Devolver verdadero si todas las casillas están ocupadas
     }
 
+    // Método para cambiar al siguiente jugador
     public void cambiarJugador() {
-        jugadorActual = (jugadorActual == JUGADOR_X) ? JUGADOR_O : JUGADOR_X;
-        
+        jugadorActual = (jugadorActual == 'X') ? 'O' : 'X'; // Cambiar al siguiente jugador
     }
 
+    // Método para comprobar si la casilla elegida por el jugador es válida
     public boolean casillaValida(int fila, int columna) {
+        // Comprobar si la fila y la columna están dentro del rango del tablero y la casilla está vacía
         return (fila >= 0 && fila < 3 && columna >= 0 && columna < 3 && tablero[fila][columna] == ' ');
     }
 }
