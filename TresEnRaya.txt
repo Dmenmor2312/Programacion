@@ -15,7 +15,7 @@ public class App {
 
     // Método que controla el flujo del juego
     public void iniciarJuego() {
-        boolean juegoTerminado = false; // Bandera para indicar si el juego ha terminado
+        boolean juegoTerminado = false; // Booleano para indicar si el juego ha terminado
         while (!juegoTerminado) { // Bucle principal del juego
             mostrarTablero(); // Mostrar el tablero actual
             juegoTerminado = realizarJugada(); // Realizar la jugada del jugador actual
@@ -57,7 +57,7 @@ public class App {
     // Método para que el jugador actual realice una jugada
     public boolean realizarJugada() {
         int fila, columna; // Variables para almacenar la fila y columna elegidas
-        boolean jugadaValida = false; // Bandera para indicar si la jugada es válida
+        boolean jugadaValida = false; // Booleano para indicar si la jugada es válida
 
         // Bucle para solicitar una jugada válida al jugador actual
         do {
